@@ -10,7 +10,21 @@
   </div>
 </template>
 <script>
-export default {    
+export default {
+  props: {
+      loop: {
+          type: Boolean,
+          default: true
+      },
+      autoPlay: {
+          type: Boolean,
+          default: true
+      },
+      interval: {
+          type: Number,
+          default: 4000
+      }
+  }
 }
 </script>
 <style lang="stylus" scoped>
