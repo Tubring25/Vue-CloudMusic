@@ -1,37 +1,22 @@
-import jsonp from '../common/js/jsonp'
-import {commonParams, options} from '../api/config'
 import axios from 'axios'
-export function getRecommend () {
-  const url = 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg?'
-  const data = Object.assign({}, commonParams, {
-    platform: 'h5',
-    uin: 0,
-    needNewCode: 1
-  })
-  return jsonp(url, data, options)
+import {HOST} from 'common/js/config'
+
+export function getBanner () {
+  const url = HOST + '/banner'
+  return axios.get(url)
 }
-export function getDiscList () {
-  const url = '/api/getDiscList'
 
-  const data = Object.assign({}, commonParams, {
-    g_tk: 5381,
-    notice: 0,
-    inCharset: 'utf8',
-    outCharset: 'utf-8',
-    platform: 'yqq',
-    hostUin: 0,
-    sin: 0,
-    ein: 29,
-    sortId: 5,
-    categoryId: 10000000,
-    needNewCode: 0,
-    rnd: Math.random(),
-    format: 'json'
-  })
+export function getRecommendList () {
+  const url = HOST + '/personalized'
+  return axios.get(url)
+}
 
-  return axios.get(url, {
-    params: data
-  }).then(res => {
-    return Promise.resolve(res.data)
-  })
+export function getRecommendMusic () {
+  const url = HOST + '/personalized/newsong'
+  return axios.get(url)
+}
+
+export function getRecommendListDetail (id) {
+  const url = HOST + `/playlist/detail?id=${id}`
+  return axios.get(url)
 }
