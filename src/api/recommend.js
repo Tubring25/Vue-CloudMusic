@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {HOST} from 'common/js/config'
+import {HOST} from '../common/js/config'
 
 export function getBanner () {
   const url = HOST + '/banner'
@@ -17,6 +17,6 @@ export function getRecommendMusic () {
 }
 
 export function getRecommendListDetail (id) {
-  const url = HOST + `/playlist/detail?id=${id}`
+  const url = HOST + `/palylist/detail?id=${id}`
   return axios.get(url)
 }

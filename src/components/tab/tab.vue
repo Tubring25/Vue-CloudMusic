@@ -9,20 +9,14 @@
     <router-link tag="div" class="tab-item" to="/singer">
       <span>歌手</span>
     </router-link>
-    <!-- <router-link tag="div" class="tab-item" to="/search">
-      <span>搜索</span>
-    </router-link> -->
   </div>
 </template>
 
 <script>
-export default {
-
-}
+export default {}
 </script>
-
 <style lang="scss" scoped>
-@import "~common/scss/variable.scss";
+@import "../../common/scss/variable.scss";
 .tab {
   display: flex;
   line-height: 44px;

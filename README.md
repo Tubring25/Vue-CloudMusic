@@ -1,6 +1,6 @@
-# vue-music
+# music-vue
 
-> A Vue.js project
+> a music
 
 ## Build Setup
 

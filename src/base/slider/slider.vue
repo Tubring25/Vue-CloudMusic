@@ -1,27 +1,27 @@
 <template>
   <div class="slider" ref="slider">
     <div class="slider-group" ref="sliderGroup">
-      <slot></slot>
+        <slot></slot>
     </div>
     <div class="dots">
-      <span class="dot" v-for="(item, index) in dots"
-      :key="index" :class="{'active' : currentPageIndex === index}"></span>
+        <span class="dot" v-for="(item, index) in dots" :key="index" :class="{'active' : currentPageIndex === index}"></span>
     </div>
   </div>
 </template>
 
 <script>
-import BScroll from 'better-scroll'
-import {addClass} from 'common/js/dom'
+import BScroll from "better-scroll"
+import { addClass } from "../../common/js/dom.js"
+
 export default {
-  data () {
+  data() {
     return {
       dots: [],
       currentPageIndex: 0
     }
   },
   props: {
-    // 循环轮播
+    // 轮播
     loop: {
       type: Boolean,
       default: true
@@ -37,14 +37,13 @@ export default {
       default: 4000
     }
   },
-  mounted () {
+  mounted() {
     setTimeout(() => {
       this._setSliderWidth()
       this._initDots()
       this._initSlider()
       this._onScrollEnd()
     }, 20)
-
     window.addEventListener('resize', () => {
       if (!this.slider) {
         return
@@ -53,27 +52,30 @@ export default {
     })
   },
   methods: {
-    _setSliderWidth () {
+    // 设置轮播宽度
+    _setSliderWidth() {
+      // 外层div的子元素，即轮播img
       this.children = this.$refs.sliderGroup.children
       let width = 0
+      // 总的slider宽度等于最外层的内部宽度
       let sliderWidth = this.$refs.slider.clientWidth
+      // 循环子元素，添加class，并设置宽度为slider宽度
       for (let i = 0; i < this.children.length; i++) {
         const child = this.children[i]
-        addClass(child, 'slider-item')
-        child.style.width = sliderWidth + 'px'
+        addClass(child, "slider-item")
+        child.style.width = sliderWidth + "px"
         width += sliderWidth
       }
-
       if (this.loop) {
         width += 2 * sliderWidth
       }
-      this.$refs.sliderGroup.style.width = width + 'px'
+      this.$refs.sliderGroup.style.width = width + "px"
     },
-    _initSlider () {
+    _initSlider() {
       this.slider = new BScroll(this.$refs.slider, {
         scrollX: true,
-        // scrollY: false,
-        momentum: false,
+        // scrollY: false
+        mometun: false,
         snap: {
           loop: this.loop,
           threshold: 0.3,
@@ -82,9 +84,9 @@ export default {
         snapSpeed: 400,
         bounce: false,
         stopPropagation: true,
-        click: true
+        clcik: true
       })
-      this.slider.on('scrollEnd', this._onScrollEnd)
+      this.slider.on("scrollEnd", this._onScrollEnd)
     },
     _onScrollEnd () {
       let pageIndex = this.slider.getCurrentPage().pageX
@@ -93,24 +95,26 @@ export default {
         this._play()
       }
     },
+    // 执行一次完整轮播后清除setTimeout重新开始
     _play () {
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
-        this.slider.next()
+          this.slider.next()
       }, this.interval)
     },
+    // dot数量与img匹配
     _initDots () {
       this.dots = new Array(this.children.length)
     }
   },
-  destroyed () {
+  destroyed() {
     clearTimeout(this.timer)
   }
 }
 </script>
-
 <style lang="scss" scoped>
-@import "~common/scss/variable";
+@import "../../common/scss/variable.scss";
+
 .slider {
   min-height: 1px;
   position: relative;
@@ -124,7 +128,7 @@ export default {
       overflow: hidden;
       text-align: center;
       img {
-        display: block;;
+        display: block;
         width: 100%
       }
     }
