@@ -10,11 +10,11 @@
 </template>
 
 <script>
-import BScroll from "better-scroll"
-import { addClass } from "../../common/js/dom.js"
+import BScroll from 'better-scroll'
+import { addClass } from '../../common/js/dom.js'
 
 export default {
-  data() {
+  data () {
     return {
       dots: [],
       currentPageIndex: 0
@@ -37,7 +37,7 @@ export default {
       default: 4000
     }
   },
-  mounted() {
+  mounted () {
     setTimeout(() => {
       this._setSliderWidth()
       this._initDots()
@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     // 设置轮播宽度
-    _setSliderWidth() {
+    _setSliderWidth () {
       // 外层div的子元素，即轮播img
       this.children = this.$refs.sliderGroup.children
       let width = 0
@@ -62,16 +62,16 @@ export default {
       // 循环子元素，添加class，并设置宽度为slider宽度
       for (let i = 0; i < this.children.length; i++) {
         const child = this.children[i]
-        addClass(child, "slider-item")
-        child.style.width = sliderWidth + "px"
+        addClass(child, 'slider-item')
+        child.style.width = sliderWidth + 'px'
         width += sliderWidth
       }
       if (this.loop) {
         width += 2 * sliderWidth
       }
-      this.$refs.sliderGroup.style.width = width + "px"
+      this.$refs.sliderGroup.style.width = width + 'px'
     },
-    _initSlider() {
+    _initSlider () {
       this.slider = new BScroll(this.$refs.slider, {
         scrollX: true,
         // scrollY: false
@@ -86,7 +86,7 @@ export default {
         stopPropagation: true,
         clcik: true
       })
-      this.slider.on("scrollEnd", this._onScrollEnd)
+      this.slider.on('scrollEnd', this._onScrollEnd)
     },
     _onScrollEnd () {
       let pageIndex = this.slider.getCurrentPage().pageX
@@ -99,7 +99,7 @@ export default {
     _play () {
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
-          this.slider.next()
+        this.slider.next()
       }, this.interval)
     },
     // dot数量与img匹配
@@ -107,13 +107,13 @@ export default {
       this.dots = new Array(this.children.length)
     }
   },
-  destroyed() {
+  destroyed () {
     clearTimeout(this.timer)
   }
 }
 </script>
 <style lang="scss" scoped>
-@import "../../common/scss/variable.scss";
+@import '../../common/scss/variable.scss';
 
 .slider {
   min-height: 1px;

@@ -4,10 +4,10 @@
   </div>
 </template>
 <script>
-import BScroll from "better-scroll"
+import BScroll from 'better-scroll'
 export default {
   props: {
-    probeType: { //调节在scroll事件出发中探针的活跃度
+    probeType: { // 调节在scroll事件出发中探针的活跃度
       type: Number,
       default: 1
     },
@@ -15,19 +15,19 @@ export default {
       type: Array,
       default: null
     },
-    click: { //允许点击
+    click: { // 允许点击
       type: Boolean,
       default: true
     },
-    listenScroll: { //监听滚动
+    listenScroll: { // 监听滚动
       type: Boolean,
       default: false
     },
-    pullup: { //上拉
+    pullup: { // 上拉
       type: Boolean,
       default: false
     },
-    refreshDelay: { //刷新延迟
+    refreshDelay: { // 刷新延迟
       type: Number,
       default: 20
     }
@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     _initScroll () {
-      if (!this.$refs.wrapper) {//通过$refs访问ref的名称来访问DOM元素
+      if (!this.$refs.wrapper) { // 通过$refs访问ref的名称来访问DOM元素
         return
       }
       this.scroll = new BScroll(this.$refs.wrapper, {
@@ -50,7 +50,7 @@ export default {
       if (this.listenScroll) {
         let _this = this
         this.scroll.on('scroll', (pos) => {
-          this.$emit('scroll', pos)
+          _this.$emit('scroll', pos)
         })
       }
       if (this.pullup) {

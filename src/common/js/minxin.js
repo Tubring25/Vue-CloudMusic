@@ -1,5 +1,5 @@
 import {mapGetters, mapMutations, mapActions} from 'vuex'
-import {palyMode} from './config'
+import {playMode} from './config'
 import {shuffle} from './utl'
 
 export const playlistMixin = {
