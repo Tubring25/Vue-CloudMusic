@@ -9,6 +9,17 @@ const Recommend = (resolve) => {
   })
 }
 
+const Rank = (resolve) => {
+  import('../components/rank/rank').then((module) => {
+    resolve(module)
+  })
+}
+
+const Singer = (resolve) => {
+  import('../components/singer/singer').then((module) => {
+    resolve(module)
+  })
+}
 export default new Router({
   routes: [
     {
@@ -19,6 +30,14 @@ export default new Router({
     {
       path: '/recommend',
       component: Recommend
+    },
+    {
+      path: '/rank',
+      component: Rank
+    },
+    {
+      path: '/singer',
+      component: Singer
     }
   ]
 })

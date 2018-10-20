@@ -2,8 +2,8 @@ import axios from 'axios'
 import {HOST} from '../common/js/config'
 
 //  获取热门歌手
-export function getSinger () {
-  const url = HOST + `/toplist/artist?limit=80`
+export function getSingers () {
+  const url = HOST + `/top/artists?limit=100`
   return axios.get(url)
 }
 

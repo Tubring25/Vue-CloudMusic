@@ -40,7 +40,7 @@ export function createRecommendListSong (music) {
 export function createSong (music) {
   return new Song({
     id: music.id,
-    singer: singerName(music.artists),
+    singer: singerName(music.ar),
     name: music.name,
     album: music.album,
     image: music.picUrl
