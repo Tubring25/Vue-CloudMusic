@@ -5,10 +5,31 @@
         <i class="fa fa-angle-left"></i>
       </div>
       <div class="text">
-        <h1 class="title"></h1>
+        <h1 class="title">{{headerTitle}}</h1>
       </div>
     </div>
-
+    <scroll class="list" @scroll="scroll" :probe-type="probeType" :list-scroll="listenScroll" ref="list">
+      <div class="music-list-wrapper">
+        <div class="bg-ima" :style="bgStyle" ref="bgImage">
+          <div class="filter"></div>
+          <div class="text">
+            <h2 class="list-title">{{title}}</h2>
+            <p class="update">{{updateTime}}</p>
+          </div>
+        </div>
+        <div class="song-list-wrapper">
+          <div class="sequence-play" v-show="listDetail.length" @click="sequence">
+            <i class="sequence-play icon-bofangicon"></i>
+            <span class="text">Play All</span>
+            <span class="count">(共{{listDetail.length}}首)</span>
+          </div>
+          <song-list @select="selectItem" :songs="listDetail"></song-list>
+        </div>
+      </div>
+      <div v-show="!listDetail.length" class="loading-content">
+        <loading></loading>
+      </div>
+    </scroll>
   </transition>
 </template>
 
@@ -32,15 +53,15 @@ export default {
       headerTitle: 'Singer'
     }
   },
-  created() {
+  created () {
     if (!this.topList.id) {
       this.$router.push('/rank')
     }
     this._normalizeSongs(this.topList.tracks)
     this.probeType = 3
-    this.listenDetail = true
+    this.listenScroll = true
   },
-  mounted() {
+  mounted () {
     this.imageHeight = this.$refs.bgImage.clientHeight
     this.minTranslateY = -this.imageHeight + RESERVED_HEIGHT
   },
@@ -104,6 +125,25 @@ export default {
       'sequencePlay'
     ])
   },
-  
+  watch: {
+    scrollY (newY) {
+      const percent = Math.abs(newY / this.imageHeight)
+      if (newY < (this.minTranslateY + RESERVED_HEIGHT - 2)) {
+        this.headerTitle = this.headerTitleTouchDown
+      } else {
+        this.headerTitle = 'singer'
+      }
+      if (newY < 0) {
+        this.$refs.header.style.background = `rgba(212, 68, 57, ${percent})`
+      } else {
+        this.$refs.header.style.background = `rgba(212, 68, 57, 0)`
+      }
+    },
+    components: {
+      SongList,
+      Scroll,
+      Loading
+    }
+  }
 }
 </script>

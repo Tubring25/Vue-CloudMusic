@@ -15,11 +15,24 @@ const Rank = (resolve) => {
   })
 }
 
+const RankDetail = (resolve) => {
+  import('../components/rank-detail/rank-detail').then((module) => {
+    resolve(module)
+  })
+}
+
 const Singer = (resolve) => {
   import('../components/singer/singer').then((module) => {
     resolve(module)
   })
 }
+
+const SingerDetail = (resolve) => {
+  import('../components/singer-detail/singer-detail.vue').then((module) => {
+    resolve(module)
+  })
+}
+
 export default new Router({
   routes: [
     {
@@ -33,11 +46,23 @@ export default new Router({
     },
     {
       path: '/rank',
-      component: Rank
+      component: Rank,
+      children: [
+        {
+          path: ':id',
+          component: RankDetail
+        }
+      ]
     },
     {
       path: '/singer',
-      component: Singer
+      component: Singer,
+      children: [
+        {
+          path: ':id',
+          component: SingerDetail
+        }
+      ]
     }
   ]
 })

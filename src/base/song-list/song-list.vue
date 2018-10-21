@@ -26,7 +26,7 @@ export default {
       this.$emit('select', item, index)
     },
     getDesc (song) {
-      if(song.aliaName) {
+      if (song.aliaName) {
         return `${song.singer} - ${song.aliaName}`
       } else {
         return `${song.singer}`
@@ -74,4 +74,3 @@ export default {
   }
 }
 </style>
-

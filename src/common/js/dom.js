@@ -12,7 +12,7 @@ export function hasClass (el, className) {
   return reg.test(el.className)
 }
 
-export function getDate (el, name, val) {
+export function getData (el, name, val) {
   const prefix = 'data-'
   name += prefix
   if (val) {
