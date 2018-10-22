@@ -79,7 +79,7 @@ export const playerMixin = {
       if (this.isFavor(song)) {
         this.delFavorList(song)
       } else {
-        this.saveFaovrList(song)
+        this.saveFavorList(song)
       }
     },
     isFavor (song) {
