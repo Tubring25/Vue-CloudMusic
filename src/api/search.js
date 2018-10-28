@@ -6,7 +6,7 @@ export function getSearchSinger (name) {
   return axios.get(url)
 }
 
-export function getSearchSong (name, page) {
+export function getSearchSongs (name, page) {
   const url = HOST + `/search?keywords=${name}&offset=${page}`
   return axios.get(url)
 }
