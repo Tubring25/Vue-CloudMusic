@@ -610,9 +610,126 @@ export default {
           &.disable {
             color: $color-theme;
           }
+          i {
+            font-size: 30px;
+          }
+          .mode {
+            font-size: 25px;
+          }
+          &.i-center {
+            text-align: right;
+          }
+          &.i-center {
+            padding: 0 20px;
+            text-align: center;
+            i {
+              font-size: 40px;
+            }
+          }
+          &.i-right {
+            text-align: left;
+          }
+          .icon-like {
+            color: $color-sub-theme;
+          }
         }
       }
     }
+    &.normal-enter-active, &.normal-leave-active {
+      transition: all 0.4s;
+      .top, .bottom {
+        transition: all 0.4s cubic-bezier(0.86, 0.18, 0.82, 1.32);
+      }
+    }
+    &.normal-enter, &.normal-leave-to {
+      opacity: 0;
+    }
+  }
+  .mini-player {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 180;
+    width: 100%;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.85);
+    &.mini-enter-active, &.mini-leave-active {
+      transition: all 0.4s
+    }
+    &.mini-enter, &.mini-leave-to {
+      opacity: 0
+    }
+    .icon {
+      flex: 0 0 40px;
+      width: 40px;
+      padding: 0 10px 0 20px;
+      img {
+        border-radius: 50%;
+        &.play {
+          animation: rotate 10s linear infinite;
+        }
+        &.pause {
+          animation-play-state: paused;
+        }
+      }
+    }
+    .text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex: 1;
+      overflow: hidden;
+      .name {
+       margin-bottom: 2px;
+       line-height: 14px;
+       @include no-wrap();
+       font-size: $font-size-medium;
+       color: $color-text;
+      }
+      .desc {
+       @include no-wrap();
+        font-size: $font-size-small;
+        color: $color-text;
+      }
+    }
+    .control {
+      flex: 0 0 30px;
+      width: 30px;
+      padding: 0 10px;
+      .icon-play-mini, .icon-pause-mini, .icon-playlist, .iconfont {
+        font-size: 30px;
+        color: $color-theme-d;
+      }
+      .iconfont {
+        position: relative;
+        left: -5px;
+        top: -3px;
+      }
+      .fa-play {
+        color: $color-theme-d;
+        font-size: 14px;
+        position: absolute;
+        left: 12px;
+        top: 8.5px;
+      }
+      .fa-stop {
+        color: $color-theme-d;
+        font-size: 12px;
+        position: absolute;
+        left: 11px;
+        top: 10px;
+      }
+    }
+  }
+}
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 </style>
