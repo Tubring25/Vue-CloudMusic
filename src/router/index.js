@@ -33,23 +33,23 @@ const SingerDetail = (resolve) => {
   })
 }
 
-const Search = (resolve) => {
-  import('../components/search/search.vue').then((module) => {
-    resolve(module)
-  })
-}
+// const Search = (resolve) => {
+//   import('../components/search/search.vue').then((module) => {
+//     resolve(module)
+//   })
+// }
 
-const MusicList = (resolve) => {
-  import('../components/music-list/music-list').then((module) => {
-    resolve(module)
-  })
-}
+// const MusicList = (resolve) => {
+//   import('../components/music-list/music-list').then((module) => {
+//     resolve(module)
+//   })
+// }
 
-const User = (resolve) => {
-  import('../components/user/user').then((module) => {
-    resolve(module)
-  })
-}
+// const User = (resolve) => {
+//   import('../components/user/user').then((module) => {
+//     resolve(module)
+//   })
+// }
 
 export default new Router({
   routes: [
@@ -60,13 +60,13 @@ export default new Router({
     },
     {
       path: '/recommend',
-      component: Recommend,
-      children: [
-        {
-          path: ':id',
-          component: MusicList
-        }
-      ]
+      component: Recommend
+      // children: [
+      //   {
+      //     path: ':id',
+      //     component: MusicList
+      //   }
+      // ]
     },
     {
       path: '/rank',
@@ -87,24 +87,24 @@ export default new Router({
           component: SingerDetail
         }
       ]
-    },
-    {
-      path: '/search',
-      component: Search,
-      children: [
-        {
-          path: 'singer/:id',
-          component: SingerDetail
-        },
-        {
-          path: 'list/:id',
-          component: MusicList
-        }
-      ]
-    },
-    {
-      path: '/user',
-      component: User
     }
+    // {
+    //   path: '/search',
+    //   component: Search,
+    //   children: [
+    //     {
+    //       path: 'singer/:id',
+    //       component: SingerDetail
+    //     },
+    //     {
+    //       path: 'list/:id',
+    //       component: MusicList
+    //     }
+    //   ]
+    // },
+    // {
+    //   path: '/user',
+    //   component: User
+    // }
   ]
 })
