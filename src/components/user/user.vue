@@ -13,9 +13,9 @@
       <span class="count">(共{{count}}首)</span>
     </div>
     <div class="list-wrapper" ref="listWrapper">
-      <scroll ref="favorList" class="list-scroll" :data="favorList" v-if="currentIndex === 0">
+      <scroll ref="favoriteList" class="list-scroll" :data="favoriteList" v-if="currentIndex === 0">
         <div class="list-inner">
-          <song-list @select="selectSong" :songs="favorList"></song-list>
+          <song-list @select="selectSong" :songs="favoriteList"></song-list>
         </div>
       </scroll>
       <scroll ref="playList" class="list-scroll" v-if="currentIndex === 1" :data="playHistory">
@@ -32,11 +32,12 @@
 </template>
 
 <script>
-import Switches from '../../base/switches/switches'
-import NoResult from '../../base/no-result/no-result'
-import Scroll from '../../base/scroll/scroll'
-import SongList from '../../base/song-list/song-list'
+import Switches from 'base/switches/switches'
 import {mapGetters, mapActions} from 'vuex'
+import NoResult from 'base/no-result/no-result'
+import Scroll from 'base/scroll/scroll'
+import SongList from 'base/song-list/song-list'
+// import {playlistMixin} from 'common/js/mixin'
 
 export default {
   data () {
@@ -51,14 +52,14 @@ export default {
   computed: {
     noResult () {
       if (this.currentIndex === 0) {
-        return !this.favorList.length
+        return !this.favoriteList.length
       } else {
         return !this.playHistory.length
       }
     },
     count () {
       if (this.currentIndex === 0) {
-        return this.favorList.length
+        return this.favoriteList.length
       } else {
         return this.playHistory.length
       }
@@ -71,7 +72,7 @@ export default {
       }
     },
     ...mapGetters([
-      'favorList',
+      'favoriteList',
       'playHistory'
     ])
   },
@@ -86,7 +87,7 @@ export default {
       this.insertSong(song)
     },
     sequence () {
-      let list = this.currentIndex === 0 ? this.favorList : this.playHistory
+      let list = this.currentIndex === 0 ? this.favoriteList : this.playHistory
       if (list.length === 0) {
         return
       }

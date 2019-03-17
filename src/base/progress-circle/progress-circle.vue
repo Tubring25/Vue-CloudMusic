@@ -1,14 +1,15 @@
 <template>
-  <div class="progress-circl">
+  <div class="progress-circle">
     <svg :width="radius" :height="radius" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg">
-      <circle class="progress-background" r="50" cx="50" cy="50" fill="transparent"></circle>
-      <circle class="progress-bar" r="50" cx="50" cy="50" fill="transparent" :stroke-dasharray="dashArray" :stroke-dashoffset="dashOffset"/>
+      <circle class="progress-background" r="50" cx="50" cy="50" fill="transparent"/>
+      <circle class="progress-bar" r="50" cx="50" cy="50" fill="transparent" :stroke-dasharray="dashArray"
+              :stroke-dashoffset="dashOffset"/>
     </svg>
     <slot></slot>
   </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
 export default {
   props: {
     radius: {
@@ -32,8 +33,10 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-@import '../../common/scss/variable.scss';
+
+<style scoped lang="scss" >
+@import "~common/scss/variable";
+
 .progress-circle {
   position: relative;
   circle {
@@ -45,9 +48,8 @@ export default {
     }
     &.progress-bar {
       transform: scale(0.9) rotate(-90deg);
-      stroke: $color-highlight-background; 
+      stroke: $color-highlight-background;
     }
   }
 }
 </style>
-

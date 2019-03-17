@@ -1,14 +1,17 @@
 <template>
   <div class="player" v-show="playlist.length > 0">
-    <transition name="normal">
-      <div class="normal-player" v-show="fullScreen" @touchstart.once="fristPlay">
+    <transition name="normal" >
+      <div class="normal-player" v-show="fullScreen" @touchstart.once="firstPlay">
         <div class="background">
+          <!-- <transition name="filterR">
+          <div class="filterR" v-show="currentShow === 'lyric'"></div>
+          </transition> -->
           <div class="filter"></div>
           <img :src="currentSong.image" width="100%" height="100%">
         </div>
         <div class="top">
           <div class="back" @click="back">
-            <i class="fa fa-angle=down"></i>
+            <i class="fa fa-angle-down"></i>
           </div>
           <h1 class="title" v-html="currentSong.name"></h1>
           <h2 class="subtitle" v-html="currentSong.singer"></h2>
@@ -17,23 +20,22 @@
           <transition name="middleL">
             <div class="middle-l" v-show="currentShow === 'cd'">
               <div class="cd-wrapper">
-                <div class="cd" :class="cdCls">
-                  <img class="image" :src="currentSong.image">
+                <div class="cd" :class="cdCls" >
+                  <img :src="currentSong.image" class="image">
                 </div>
               </div>
             </div>
           </transition>
           <transition name="middleR">
-            <scroll class="middle-r" ref="lyricList" v-show="currentShow" :data="currentLyric && currentLyric.lines">
+            <scroll class="middle-r" ref="lyricList" v-show="currentShow === 'lyric'" :data="currentLyric && currentLyric.lines">
               <div class="lyric-wrapper">
                 <div class="currentLyric" v-if="currentLyric">
-                  <p class="text" ref="lyricLine" :class="{'current': currentLineNum === index}" v-for="(line, index) in currentLyric.lines" :key="line.key">
+                  <p ref="lyricLine" class="text" :class="{'current': currentLineNum === index}"
+                    v-for="(line, index) in currentLyric.lines" :key="line.key">
                     {{line.txt}}
                   </p>
                 </div>
-                <p class="no-lyric" v-if="currentLyric === null">
-                  {{upDatecurrentLyric}}
-                </p>
+                  <p class="no-lyric" v-if="currentLyric === null">{{upDatecurrentLyric}}</p>
               </div>
             </scroll>
           </transition>
@@ -42,34 +44,34 @@
           <div class="progress-wrapper">
             <span class="time time-l">{{format(currentTime)}}</span>
             <div class="progress-bar-wrapper">
-              <progress-bar :percent="percent" @percentChangeEnd="percentChangeEnd" @percentChage="percentChange"></progress-bar>
+              <progress-bar :percent="percent" @percentChangeEnd="percentChangeEnd" @percentChange="percentChange"></progress-bar>
             </div>
-            <span class="time timer-r">{{format(duration)}}</span>
+            <span class="time time-r">{{format(duration)}}</span>
           </div>
           <div class="operators">
-            <div class="icon i-left">
+            <div class="icon i-left" >
               <i class="iconfont mode" :class="iconMode" @click="changeMode"></i>
             </div>
-            <div class="icon i-left">
+            <div class="icon i-left" >
               <i class="iconfont icon-prev" @click="prev"></i>
             </div>
-            <div class="icon i-center">
+            <div class="icon i-center" >
               <i class="iconfont" @click="togglePlaying" :class="playIcon"></i>
             </div>
-            <div class="icon i-right">
+            <div class="icon i-right" >
               <i class="iconfont icon-test" @click="next"></i>
             </div>
             <div class="icon i-right">
-              <i class="iconfont" @click="toggleFavor(currentSong)" :class="getFavorIcon(currentSong)"></i>
+              <i class="iconfont"  @click="toggleFavorite(currentSong)" :class="getFavoriteIcon(currentSong)"></i>
             </div>
           </div>
         </div>
       </div>
     </transition>
     <transition name="mini">
-      <div class="mini-play" v-show="!fullScreen" @click.stop="open">
+      <div class="mini-player" v-show="!fullScreen" @click.stop="open">
         <div class="icon">
-          <img :class="cdCls" :src="currentSong.image" width="40" height="40">
+          <img :class="cdCls"  :src="currentSong.image" width="40" height="40">
         </div>
         <div class="text">
           <h2 class="name" v-html="currentSong.name"></h2>
@@ -77,6 +79,7 @@
         </div>
         <div class="control" @click.stop="togglePlaying">
           <progress-circle :radius="radius" :percent="percent">
+            <!-- <i class="icon-mini" :class="miniIcon" ></i> -->
             <i class="fa" :class="miniIcon"></i>
           </progress-circle>
         </div>
@@ -91,19 +94,21 @@
 </template>
 
 <script>
-import ProgressCircle from '../../base/progress-circle/progress-circle'
-import ProgressBar from '../../base/progress-bar/progress-bar'
-import Scroll from '../../base/scroll/scroll'
-import Playlist from '../../components/playlist/playlist'
+import ProgressCircle from 'base/progress-circle/progress-circle'
+import ProgressBar from 'base/progress-bar/progress-bar'
 import Lyric from 'lyric-parser'
-import {getSong, getLyric} from '../../api/song.js'
-import {playMode} from '../../common/js/config.js'
-import {shuffle} from '../../common/js/utl.js'
-import {mapGetters, mapActions, mapMutations} from 'vuex'
+import Scroll from 'base/scroll/scroll'
+import Playlist from 'cpnts/playlist/playlist'
+import {mapGetters, mapMutations, mapActions} from 'vuex'
+import {getSong, getLyric} from 'api/song'
+import {playMode} from 'common/js/config'
+import {shuffle} from 'common/js/utl'
+import { ERR_OK } from "common/js/config"
 
 export default {
   data () {
     return {
+      // id: '',
       url: '',
       songReady: false,
       currentTime: 0,
@@ -142,7 +147,8 @@ export default {
     upDatecurrentLyric () {
       if (this.noLyric) {
         return '暂无歌词'
-      } else {
+      }
+      if (!this.noLyric) {
         return '歌词加载中'
       }
     },
@@ -151,19 +157,20 @@ export default {
       'fullScreen',
       'currentSong',
       'playing',
+      'currentIndex',
       'mode',
       'sequenceList',
-      'favorList'
+      'favoriteList'
     ])
   },
   watch: {
     currentSong (newVal, oldVal) {
-      if (!newVal.id || newVal.id === oldVal.id) {
+      if (!newVal.id) {
         return
       }
-    //   if (newVal.id === oldVal.id) {
-    //     return
-    //   }
+      if (newVal.id === oldVal.id) {
+        return
+      }
       this.$refs.audio.pause()
       this.$refs.audio.currentTime = 0
       this._getSong(newVal.id)
@@ -185,44 +192,46 @@ export default {
   },
   methods: {
     firstPlay () {
-    //   console.log('firstPlay')
+      console.log('firstPlay')
       this.$refs.audio.play()
     },
     stopMusic () {
+      // 删除最后一首的时候暂停音乐
       this.$refs.audio.pause()
-    //   console.log('删除最后一首歌的时候暂停音乐')
+      console.log('删除最后一首的时候暂停音乐')
     },
     showPlaylist () {
-      this.$refs.Playlist.show()
+      this.$refs.playlist.show()
     },
-    chageMiddle () {
+    changeMiddle () {
       if (this.currentShow === 'cd') {
         this.currentShow = 'lyric'
       } else {
         this.currentShow = 'cd'
       }
+      // console.log(this.currentShow)
     },
-    getFavorIcon (song) {
-      if (this.isFavor(song)) {
+    getFavoriteIcon (song) {
+      if (this.isFavorite(song)) {
         return 'icon-like'
       }
       return 'icon-dislike'
     },
-    toggleFavor (song) {
-      if (this.isFavor(song)) {
-        this.deleteFavorList(song)
+    toggleFavorite (song) {
+      if (this.isFavorite(song)) {
+        this.deleteFavoriteList(song)
       } else {
-        this.saveFavorList(song)
+        this.saveFavoriteList(song)
       }
     },
-    isFavor (song) {
-      const index = this.favorList.findIndex((item) => {
+    isFavorite (song) {
+      const index = this.favoriteList.findIndex((item) => {
         return item.id === song.id
       })
       return index > -1
     },
     changeMode () {
-      const mode = (this.mode +1) % 3
+      const mode = (this.mode + 1) % 3
       this.setPlayMode(mode)
       let list = null
       if (mode === playMode.random) {
@@ -268,7 +277,7 @@ export default {
     format (interval) {
       interval = interval | 0
       let minute = interval / 60 | 0
-      let second = interval % 60 | 0
+      let second = interval % 60
       if (second < 10) {
         second = '0' + second
       }
@@ -299,7 +308,7 @@ export default {
       if (!this.songReady) {
         return
       }
-      if (this.Playlist.length === 1) {
+      if (this.playlist.length === 1) {
         this.loop()
         return
       } else {
@@ -308,6 +317,7 @@ export default {
           index = 0
         }
         this.setCurrentIndex(index)
+        // this.$refs.audio.play()
         if (!this.playing) {
           this.togglePlaying()
         }
@@ -344,9 +354,14 @@ export default {
         this.currentLyric.togglePlay()
       }
     },
-    _getSong (id) {
+    __getSong (id) {
       getSong(id).then((res) => {
-        this.url = res.data.data[0].url
+        if (res.status === ERR_OK) {
+          this.url = res.data.data[0].url
+          console.log('finish')
+        } else {
+          console.log('false')
+        }
       })
     },
     _getLyric (id) {
@@ -356,9 +371,10 @@ export default {
       }
       this.noLyric = false
       getLyric(id).then((res) => {
-        this.currentLyric = new Lyric(res.data.lrc.Lyric, this.handleLyric)
+        this.currentLyric = new Lyric(res.data.lrc.lyric, this.handleLyric)
         if (this.playing) {
           this.currentLyric.play()
+          // 歌词重载以后 高亮行设置为 0
           this.currentLineNum = 0
           this.$refs.lyricList.scrollTo(0, 0, 1000)
         }
@@ -385,8 +401,8 @@ export default {
       setPlaylist: 'SET_PLAYLIST'
     }),
     ...mapActions([
-      'saveFavorlist',
-      'deleteFavorList',
+      'saveFavoriteList',
+      'deleteFavoriteList',
       'savePlayHistory'
     ])
   },
@@ -398,10 +414,10 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-@import '../../common/scss/variable.scss';
-@import '../../common/scss/mixin.scss';
 
+<style lang="scss" scoped>
+@import "~common/scss/variable";
+@import "~common/scss/mixin";
 .player {
   .normal-player {
     position: fixed;
@@ -409,23 +425,23 @@ export default {
     right: 0;
     top: 0;
     bottom: 0;
+    z-index: 150;
     background: $color-background;
-    z-index: 200;
     .background {
       position: absolute;
-      width: 300%;
-      height: 300%;
       left: -50%;
       top: -50%;
-      opacity: 0.5;
+      width: 300%;
+      height: 300%;
       z-index: -1;
+      opacity: 0.6;
       filter: blur(30px);
       .filter {
         position: absolute;
         width: 100%;
         height: 100%;
         background: black;
-        opacity: 0.5;
+        opacity: 0.6;
       }
       .filterR {
         position: absolute;
@@ -433,13 +449,11 @@ export default {
         height: 100%;
         background: black;
         opacity: 0.4;
-        &.filterR-enter-active,
-        &.filterR-leave-active {
-          transition: all 0.3s
+        &.filterR-enter-active, &.filterR-leave-active {
+          transition: all  0.3s
         }
-        &.filterR-enter,
-        &.filterR-leave-to {
-          opacity: 0;
+        &.filterR-leave-to, &.filterR-enter {
+          opacity: 0
         }
         &.filterR-leave {
           opacity: 0.4;
@@ -453,7 +467,7 @@ export default {
         position: absolute;
         top: 0;
         left: 6px;
-        z-index: 100;
+        z-index: 50;
         .fa-angle-down {
           display: block;
           padding: 5px 9px;
@@ -467,57 +481,55 @@ export default {
         padding-top: 10px;
         line-height: 20px;
         text-align: center;
+        @include no-wrap();
         font-size: $font-size-large;
         font-weight: bold;
         color: $color-text-l;
-        @include no-wrap()
       }
       .subtitle {
         width: 70%;
         margin: 0 auto;
         line-height: 20px;
         text-align: center;
+        @include no-wrap();
         font-size: $font-size-small-x;
         color: $color-text-l;
-        @include no-wrap()
       }
     }
     .middle {
       display: flex;
+      align-items: center;
       position: fixed;
-      widows: 100%;
+      width: 100%;
       top: 80px;
       bottom: 170px;
-      align-items: center;
-      font-size: 0;
       white-space: nowrap;
+      font-size: 0;
       .middle-l {
         display: inline-block;
+        vertical-align: top;
         position: relative;
         width: 100%;
         height: 0;
-        vertical-align: top;
         padding-top: 80%;
-        &.middleL-enter-active,
-        &.middleL-leave-active {
-          transition: all 0.3s;
+        &.middleL-enter-active, &.middleL-leave-active {
+          transition: all 0.3s
         }
-        &.middleL-enter,
-        &.middleL-leave-to {
-          opacity: 0;
+        &.middleL-enter, &.middleL-leave-to {
+          opacity: 0
         }
         .cd-wrapper {
           position: absolute;
-          width: 80%;
-          height: 100%;
           left: 10%;
           top: 0;
+          width: 80%;
+          height: 100%;
           .cd {
             width: 100%;
             height: 100%;
-            border: 15px solid rgba(255, 255, 255, 0.1);
             box-sizing: border-box;
-            border-radius: 0.5;
+            border: 15px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
             &.play {
               animation: rotate 20s linear infinite;
             }
@@ -526,11 +538,11 @@ export default {
             }
             .image {
               position: absolute;
-              width: 100%;
-              height: 100%;
               left: 0;
               top: 0;
-              border-radius: 0.5;
+              width: 100%;
+              height: 100%;
+              border-radius: 50%;
             }
           }
         }
@@ -538,17 +550,15 @@ export default {
       .middle-r {
         display: inline-block;
         position: absolute;
-        width: 100%;
-        height: 100%;
         top: 0;
         vertical-align: top;
+        width: 100%;
+        height: 100%;
         overflow: hidden;
-        &.middleR-enter-active,
-        &.middleR-leave-active {
-          transition: all 0.3s;
+        &.middleR-enter-active, &.middleR-leave-active {
+          transition: all 0.2s;
         }
-        &.middleR-enter,
-        &.middleR-leave-to {
+        &.middleR-enter, &.middleR-leave-to {
           opacity: 0;
         }
         .lyric-wrapper {
@@ -557,11 +567,11 @@ export default {
           overflow: hidden;
           text-align: center;
           .text {
-            line-height-step: 40px;
+            line-height: 40px;
             color: $color-text-ggg;
             font-size: $font-size-medium;
             &.current {
-              color: #fff;
+              color: #FFF;
             }
           }
           .no-lyric {
@@ -574,27 +584,27 @@ export default {
       }
     }
     .bottom {
-      width: 100%;
       position: absolute;
       bottom: 50px;
+      width: 100%;
       .progress-wrapper {
         display: flex;
-        width: 80%;
-        margin: 0 auto;
-        padding: 10px 0;
         align-items: center;
+        width: 80%;
+        margin: 0px auto;
+        padding: 10px 0;
         .time {
-          width: 30px;
+          color: $color-text-l;
+          font-size: $font-size-small;
           flex: 0 0 30px;
           line-height: 30px;
-          font-size: $font-size-small;
-          color: $color-text-l;
+          width: 30px;
           &.time-l {
             text-align: left;
           }
           &.time-r {
             text-align: right;
-            color: $color-text-ggg;
+            color: $color-text-gg;
           }
         }
         .progress-bar-wrapper {
@@ -616,7 +626,7 @@ export default {
           .mode {
             font-size: 25px;
           }
-          &.i-center {
+          &.i-left {
             text-align: right;
           }
           &.i-center {

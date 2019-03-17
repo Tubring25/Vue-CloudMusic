@@ -1,4 +1,5 @@
-import {getSong} from '../api/song'
+
+import {getSong} from 'api/song'
 
 export const musicList = state => state.musicList
 
@@ -24,10 +25,10 @@ export const searchHistory = state => state.searchHistory
 
 export const playHistory = state => state.playHistory
 
-export const favorList = state => state.favorList
+export const favoriteList = state => state.favoriteList
 
 export const currentSong = (state) => {
-  return state.playlist[state.currentSong] || {}
+  return state.playlist[state.currentIndex] || {}
 }
 
 export const currentSongUrl = (state) => {

@@ -1,14 +1,14 @@
 <template>
   <div class="search-box">
     <!-- <i class="icon-search"></i> -->
-    <input type="text" class="box" :placeholder="placeholder" v-model="query">
-    <i class="icon-delete" v-show="query" @click="clear"></i>
-    <!-- <span class="search">{{clickInfo}}</span> -->
+    <input :placeholder="placeholder" v-model="query" type="text" class="box">
+    <i v-show="query" class="icon-delete" @click="clear"></i>
+    <!-- <span class="search" >{{clickInfo}}</span> -->
   </div>
 </template>
 
 <script>
-import {debounce} from '../../common/js/utl.js'
+import {debounce} from 'common/js/utl'
 
 export default {
   props: {
@@ -39,16 +39,16 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-@import '../../common/scss/variable.scss';
+<style scoped lang="scss">
+  @import "~common/scss/variable";
 
 .search-box {
-//   position: relative;
-  width: 100%;
-  height: 25px;
+  // position: relative;
   display: flex;
   align-items: center;
   box-sizing: border-box;
+  width: 100%;
+  height: 25px;
   border-bottom: 1px solid rgb(235, 235, 235);
   .icon-search {
     font-size: 24px;
@@ -59,11 +59,11 @@ export default {
     line-height: 25px;
     background: $color-theme;
     color: #fff;
-    border: none;
     font-size: $font-size-medium;
+    border: none;
     outline: medium;
     &::placeholder {
-      color: rgba(255, 255, 255, 0.6)
+      color: rgba(255, 255, 255, 0.6);
     }
   }
   .icon-delete {
@@ -76,7 +76,7 @@ export default {
   .search {
     padding: 0 5px;
     font-size: 14px;
-    color: $color-text
+    color: $color-text;
   }
 }
 </style>

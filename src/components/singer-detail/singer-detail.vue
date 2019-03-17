@@ -9,7 +9,12 @@
         <h1 class="title">{{headerTitle}}</h1>
       </div>
     </div>
-    <scroll class="list" :probe-type="probeType" :listen-scroll="listenScroll" :data="songs">
+    <scroll class="list"
+    @scroll="scroll"
+    :probe-type="probeType"
+    :listen-scroll="listenScroll"
+    :data="songs"
+    ref="list">
       <div class="music-list-wrapper">
         <div class="bg-image" :style="bgStyle" ref="bgImage">
           <div class="filter"></div>
@@ -20,10 +25,10 @@
         <div class="song-list-wrapper">
           <div class="sequence-play" v-show="listDetail.length" @click="sequence">
             <i class="iconfont icon-bofangicon"></i>
-            <span class="text">Play All</span>
+            <span class="text">播放全部</span>
             <span class="count">(共{{listDetail.length}}首)</span>
           </div>
-          <song-list @select="selectItem" :song="listDetail"></song-list>
+          <song-list @select="selectItem" :songs="listDetail"></song-list>
         </div>
       </div>
       <div class="loading-content">
@@ -35,16 +40,16 @@
 </template>
 
 <script>
-import Scroll from '../../base/scroll/scroll'
-import SongList from '../../base/song-list/song-list'
-import Loading from '../../base/loading/loading'
-import {ERR_OK} from '../../common/js/config.js'
-import {playlistMixin} from '../../common/js/mixin.js'
-import {getSingerDetail} from '../../api/singer.js'
-import {createSong} from '../../common/js/song.js'
+import Scroll from 'base/scroll/scroll'
+import SongList from 'base/song-list/song-list'
+import Loading from 'base/loading/loading'
 import {mapGetters, mapActions} from 'vuex'
+import {ERR_OK} from 'common/js/config'
+import {playlistMixin} from 'common/js/mixin'
+import {getSingerDetail} from 'api/singer'
+import {createSong} from 'common/js/song'
 
-const RESEERVED_HEIGHT = 44
+const RESERVED_HEIGHT = 44
 
 export default {
   mixins: [playlistMixin],
@@ -58,7 +63,7 @@ export default {
       listDetail: [],
       scrollY: 0,
       node: null,
-      headerTitle: 'Singer'
+      headerTitle: '歌手'
     }
   },
   created () {
@@ -68,16 +73,16 @@ export default {
   },
   mounted () {
     this.imageHeight = this.$refs.bgImage.clientHeight
-    this.minTranslateY = -this.imageHeight + RESEERVED_HEIGHT
+    this.minTranslateY = -this.imageHeight + RESERVED_HEIGHT
   },
   computed: {
     headerTitleTouchDown () {
       let name = ''
       if (this.singer.aliaName) {
-        name = this.singer.name + `(${this.singer.aliaName})`
+        name = this.singer.name + ` (${this.singer.aliaName})`
       } else {
         name = this.singer.name
-      }
+      } 
       return name
     },
     bgStyle () {
@@ -141,17 +146,21 @@ export default {
       this.listDetail = this._normalizeSongs(val)
     },
     scrollY (newY) {
+      // let translateY = Math.max(this.minTranslateY, newY)
       const percent = Math.abs(newY / this.imageHeight)
-      if (newY < (this.minTranslateY + RESEERVED_HEIGHT - 20)) {
+      if (newY < (this.minTranslateY + RESERVED_HEIGHT - 20)) {
         this.headerTitle = this.headerTitleTouchDown
       } else {
-        this.headerTitle = 'singer'
+        this.headerTitle = '歌手'
       }
       if (newY < 0) {
         this.$refs.header.style.background = `rgba(212, 68, 57, ${percent})`
       } else {
         this.$refs.header.style.background = `rgba(212, 68, 57, 0)`
       }
+      // console.log(this.minTranslateY + RESERVED_HEIGHT)
+      // if (translateY )
+      // console.log(translateY)
     }
   },
   components: {
@@ -163,15 +172,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../common/scss/variable.scss';
-@import '../../common/scss/mixin.scss';
-
-.slide-enter-active,
-.slide-leave-active {
-  transition: all 0.2s;
+@import "~common/scss/variable";
+@import "~common/scss/mixin";
+.slide-enter-active, .slide-leave-active {
+  transition: all 0.2s
 }
-.slide-enter,
-.slide-leave-to {
+.slide-enter, .slide-leave-to {
   transform: translate3d(30%, 0, 0);
   opacity: 0;
 }
@@ -285,4 +291,5 @@ export default {
     }
   }
 }
+
 </style>

@@ -1,14 +1,17 @@
 <template>
   <div class="song-list">
-    <ul>
-      <li class="item" v-for="(song, index) in songs" :key="song.id" @click="selectItem(song, index)">
-        <p class="count">{{index + 1}}</p>
-        <div class="content">
-          <h2 class="name">{{song.name}}</h2>
-          <p class="desc">{{getDesc(song)}}</p>
-        </div>
-      </li>
-    </ul>
+   <ul>
+     <li v-for="(song, index) in songs" :key="song.id" class="item" @click="selectItem(song, index)">
+       <!-- <div class="rank" v-show="rank">
+         <span :class="getRankCls(index)">{{getRankText(index)}}</span>
+       </div> -->
+       <p class="count">{{index + 1}}</p>
+       <div class="content">
+         <h2 class="name">{{song.name}}</h2>
+         <p class="desc">{{getDesc(song)}}</p>
+       </div>
+     </li>
+   </ul>
   </div>
 </template>
 
@@ -37,9 +40,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../common/scss/variable.scss';
-@import '../../common/scss/mixin.scss';
-
+@import "~common/scss/variable";
+@import "~common/scss/mixin";
 .song-list {
   .item {
     position: relative;
@@ -49,7 +51,7 @@ export default {
     height: 60px;
     border-bottom: 1px solid rgb(228, 228, 228);
     .count {
-      flex:  0 0 50px;
+      flex: 0 0 50px;
       width: 50px;
       text-align: center;
       color: $color-text-g;
@@ -59,16 +61,17 @@ export default {
       line-height: 20px;
       overflow: hidden;
       .name {
+        margin-top: 4px;
         width: 80%;
-        margin-top: 80%;
         @include no-wrap();
         color: $color-text;
       }
       .desc {
         @include no-wrap();
+        // margin-top: 3px;
         width: 80%;
         font-size: 12px;
-        color: $color-text-g
+        color: $color-text-g;
       }
     }
   }

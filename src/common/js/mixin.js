@@ -1,6 +1,6 @@
 import {mapGetters, mapMutations, mapActions} from 'vuex'
-import {playMode} from './config'
-import {shuffle} from './utl'
+import {playMode} from 'common/js/config'
+import {shuffle} from 'common/js/utl'
 
 export const playlistMixin = {
   computed: {
@@ -9,18 +9,18 @@ export const playlistMixin = {
     ])
   },
   mounted () {
-    this.handlePlayList(this.playlist)
+    this.handlePlaylist(this.playlist)
   },
   activated () {
-    this.handlePlayList(this.playlist)
+    this.handlePlaylist(this.playlist)
   },
   watch: {
     playlist (newVal) {
-      this.handlePlayList(newVal)
+      this.handlePlaylist(newVal)
     }
   },
   methods: {
-    handlePlayList () {
+    handlePlaylist () {
       throw new Error('component must implement handlePlaylist method')
     }
   }
@@ -37,6 +37,8 @@ export const playerMixin = {
         return 'icon-random'
       }
     },
+    // vuex getters --> 获取 getters 中函数得到的数据（也就是 state 中的数据）
+    // mapGetters 中是数组
     ...mapGetters([
       'fullScreen',
       'playlist',
@@ -45,10 +47,10 @@ export const playerMixin = {
       'currentIndex',
       'mode',
       'sequenceList',
-      'favorList'
+      'favoriteList'
     ])
   },
-  mothods: {
+  methods: {
     changeMode () {
       const mode = (this.mode + 1) % 3
       console.log(this.mode)
@@ -64,26 +66,27 @@ export const playerMixin = {
     },
     resetCurrentIndex (list) {
       let index = list.findIndex((item) => {
+        // 返回 index
         return item.id === this.currentSong.id
       })
       console.log('index', index)
       this.setCurrentIndex(index)
     },
     getFavoriteIcon (song) {
-      if (this.isFavor(song)) {
+      if (this.isFavorite(song)) {
         return 'icon-favorite'
       }
       return 'icon-not-favorite'
     },
-    toggleFavor (song) {
-      if (this.isFavor(song)) {
-        this.delFavorList(song)
+    toggleFavorite (song) {
+      if (this.isFavorite(song)) {
+        this.deleteFavoriteList(song)
       } else {
-        this.saveFavorList(song)
+        this.saveFavoriteList(song)
       }
     },
-    isFavor (song) {
-      const index = this.favorList.findIndex((item) => {
+    isFavorite (song) {
+      const index = this.favoriteList.findIndex((item) => {
         return item.id === song.id
       })
       return index > -1
@@ -92,12 +95,12 @@ export const playerMixin = {
       setFullScreen: 'SET_FULL_SCREEN',
       setPlayingState: 'SET_PLAYING_STATE',
       setCurrentIndex: 'SET_CURRENT_INDEX',
-      setPlayMode: 'SET_PALY_MODE',
+      setPlayMode: 'SET_PLAY_MODE',
       setPlayList: 'SET_PLAYLIST'
     }),
     ...mapActions([
-      'saveFavorList',
-      'delFavorList'
+      'saveFavoriteList',
+      'deleteFavoriteList'
     ])
   }
 }
@@ -119,6 +122,9 @@ export const searchMixin = {
     },
     addQuery (query) {
       this.$refs.searchBox.setQuery(query)
+    },
+    saveSearch () {
+      this.saveSearchHistory(this.query)
     },
     ...mapActions([
       'saveSearchHistory',

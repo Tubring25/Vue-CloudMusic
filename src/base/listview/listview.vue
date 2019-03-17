@@ -60,6 +60,7 @@ export default {
     this.probeType = 3
   },
   methods: {
+    // 将select事件派发出去
     selectItem (item) {
       this.$emit('select', item)
     },
@@ -71,16 +72,22 @@ export default {
     },
     onShortcutStart (e) {
       let anchorIndex = getData(e.target, 'index')
+      //   touch开始时手指的位置
       let firstTouch = e.touches[0]
+      // pageY为firstTouch中属性  
       this.touch.y1 = firstTouch.pageY
+      //   记录当前索引值
       this.touch.anchorIndex = anchorIndex
       this._scrollTo(anchorIndex)
     },
     onShortcutMove (e) {
       let firshTouch = e.touches[0]
       this.touch.y2 = firshTouch.pageY
+      //   偏移量  | 0 表示向下取整 相当于Math.floor()
       let delta = (this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT | 0
+      //   move 时 的anchorIndex this.anchorIndex为字符串，需转化成整数
       let anchorIndex = parseInt(this.touch.anchorIndex) + delta
+      //   console.log(anchorIndex)
       this._scrollTo(anchorIndex)
     },
     _scrollTo (index) {
@@ -131,6 +138,7 @@ export default {
       this.currentIndex = listHeight.length - 2
     }
   },
+  //   Vue 的计算属性
   computed: {
     shortcutList () {
       return this.data.map((group) => {
@@ -151,23 +159,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../common/scss/variable.scss';
-
+@import "~common/scss/variable";
 .listview {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  // background: $color-background;
-  .list-group{
+  background: $color-background;
+  .list-group {
+    // padding: 10px 0;
     .list-group-title {
       height: 20px;
       line-height: 20px;
       padding-left: 12px;
       margin-bottom: 10px;
-      // font-size: $font-size-small;
+      font-size: $font-size-small;
       color: #fff;
-      background: rgba(0, 0, 0, 0.1)
+      background:rgba(0, 0, 0, 0.1);
     }
     .list-group-item {
       display: flex;
@@ -187,11 +195,11 @@ export default {
       .name {
         margin-left: 20px;
         color: $color-text;
-        // font-size: $font-size-mdeium;
+        font-size: $font-size-medium;
       }
     }
   }
-.list-shortcut {
+  .list-shortcut {
     position: absolute;
     z-index: 30;
     right: 3px;

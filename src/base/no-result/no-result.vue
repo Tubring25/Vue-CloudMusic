@@ -7,7 +7,7 @@
   </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
 export default {
   props: {
     title: {
@@ -17,9 +17,10 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-@import '../../common/scss/variable.scss';
-@import '../../common/scss/mixin.scss';
+
+<style scoped lang="scss" >
+  @import "~common/scss/variable";
+  @import "~common/scss/mixin";
 
 .no-result {
   text-align: center;
@@ -30,7 +31,7 @@ export default {
   .no-result-text {
     margin-top: 30px;
     font-size: $font-size-medium;
-    color: $color-text
+    color: $color-text;
   }
 }
 </style>

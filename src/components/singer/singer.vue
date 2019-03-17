@@ -6,10 +6,10 @@
 </template>
 
 <script>
-import Singer from '../../common/js/singer'
-import ListView from '../../base/listview/listview'
-import {getSingers} from '../../api/singer'
-import {playlistMixin} from '../../common/js/mixin'
+import Singer from 'common/js/singer'
+import ListView from 'base/listview/listview'
+import {getSingers} from 'src/api/singer'
+import {playlistMixin} from 'common/js/mixin'
 import {mapMutations} from 'vuex'
 
 const pinyin = require('pinyin')
@@ -28,9 +28,11 @@ export default {
   },
   methods: {
     selectSinger (singer) {
+      // 跳转路由
       this.$router.push({
         path: `/singer/${singer.id}`
       })
+      // 实现对mutataion的提交
       this.setSinger(singer)
     },
     handlePlaylist (playlist) {
@@ -41,8 +43,10 @@ export default {
     _getSingers () {
       getSingers().then((res) => {
         let s = res.data.artists
+        // console.log(s)
         s.map((item) => {
           let py = pinyin(item.name[0], {
+            // 提取首字母
             style: pinyin.STYLE_FIRST_LETTER
           })
           item.initial = py[0][0].toUpperCase()
@@ -50,6 +54,7 @@ export default {
         this.singers = this._normalizeSinger(s)
       })
     },
+    // 规范化Singre
     _normalizeSinger (list) {
       let map = {
         hot: {

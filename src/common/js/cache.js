@@ -1,10 +1,12 @@
+// 操作和 storage 相关代码
+
 import storage from 'good-storage'
 
 const SEARCH_KEY = '__search__'
 const SEARCH_MAX_LEANGTH = 15
 
 const PLAY_KEY = '__play__'
-const PLAY_MAX_LENGTH = 200 
+const PLAY_MAX_LENGTH = 200
 
 const FAVORITE_KEY = '__favorite__'
 const FAVORITE_MAX_LENGTH = 200
@@ -44,11 +46,14 @@ function deleteFromArray (arr, compare) {
 }
 
 export function deleteSearch (query) {
+  // 首先获取
   let searches = storage.get(SEARCH_KEY, [])
+
   deleteFromArray(searches, (item) => {
     return item === query
   })
   console.log('delet', searches)
+
   storage.set(SEARCH_KEY, searches)
   return searches
 }
@@ -68,7 +73,7 @@ export function savePlay (song) {
 }
 
 export function loadPlay () {
-  return storage.set(PLAY_KEY, [])
+  return storage.get(PLAY_KEY, [])
 }
 
 export function saveFavorite (song) {

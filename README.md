@@ -1,21 +1,5 @@
-# music-vue
+# VUE for Web app
+基于Vue2.0 + vuex + vue-router + axios + better-scroll + Scss + ES6 等开发移动端WebApp
 
-> a music
-
-## Build Setup
-
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## 预览
+![首页](doc\img\1552639682(1).png)

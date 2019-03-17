@@ -1,16 +1,19 @@
 <template>
-  <div class="progress-bar" ref="progressBar" @click="progressClikc">
+  <div class="progress-bar" ref="progressBar" @click="progressClick">
     <div class="bar-inner">
       <div class="progress" ref="progress"></div>
-      <div class="progress-btn-wrapper" ref="progressBtn" @touchstart.prevent="progressTouchStart" @touchmove.prevent="progressTouchMove" @touchend.prevent="progressTouchEnd">
+      <div class="progress-btn-wrapper" ref="progressBtn"
+      @touchstart.prevent="progressTouchStart"
+      @touchmove.prevent="progressTouchMove"
+      @touchend.prevent="progressTouchEnd">
         <div class="progress-btn"></div>
       </div>
     </div>
   </div>
 </template>
-<script>
-import {prefixStyle} from '../../common/js/dom.js'
 
+<script>
+import {prefixStyle} from 'common/js/dom'
 const progressBtnWidth = 16
 const transform = prefixStyle('transform')
 
@@ -21,19 +24,27 @@ export default {
     }
   },
   props: {
-    precent: {
+    percent: {
       type: Number,
       default: 0
     }
   },
+  created () {
+    this.touch = {}
+  },
   methods: {
     progressClick (e) {
+      // 这个有 bug
+      // this._offset(e.offsetX)
       const rect = this.$refs.progressBar.getBoundingClientRect()
+      // rect.left 元素距离左边的距离
+      // e.pageX 点击距离左边的距离
       const offsetWidth = e.pageX - rect.left
+      // console.log(rect, e.pageX)
       this._offset(offsetWidth)
       const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
-      const precent = this.$refs.progress.clientWidth / barWidth
-      this.$emit('percentChangeEnd', precent)
+      const percent = this.$refs.progress.clientWidth / barWidth
+      this.$emit('percentChangeEnd', percent)
     },
     progressTouchStart (e) {
       this.touch.initiated = true
@@ -47,13 +58,13 @@ export default {
       this._triggerPercent()
       const deltaX = e.touches[0].pageX - this.touch.startX
       const offsetWidth = Math.min(Math.min(this.$refs.progressBar.clientWidth - progressBtnWidth, Math.max(0, this.touch.left + deltaX)))
-      this.$emit(offsetWidth)
+      this._offset(offsetWidth)
     },
     progressTouchEnd (e) {
       this.touch.initiated = false
       const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
-      const precent = this.$refs.progress.clientWidth - barWidth
-      this.$emit('percentChange', percent)
+      const percent = this.$refs.progress.clientWidth / barWidth
+      this.$emit('percentChangeEnd', percent)
     },
     _triggerPercent () {
       const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
@@ -76,8 +87,9 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-@import '../../common/scss/variable.scss';
+
+<style scoped lang="scss">
+@import "~common/scss/variable";
 
 .progress-bar {
   height: 30px;
@@ -93,19 +105,19 @@ export default {
     }
     .progress-btn-wrapper {
       position: absolute;
-      width: 30px;
-      height: 30px;
       left: -8px;
       top: -13px;
+      width: 30px;
+      height: 30px;
       .progress-btn {
         position: relative;
-        width: 16px;
-        height: 16px;
         top: 7px;
         left: 7px;
+        box-sizing: border-box;
+        width: 16px;
+        height: 16px;
         border: 5px solid $color-theme-l;
         border-radius: 50%;
-        box-sizing: border-box;
         background: $color-theme;
       }
     }

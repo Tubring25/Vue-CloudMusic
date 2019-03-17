@@ -9,21 +9,21 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'loading'
+      default: '正在载入'
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '../../common/scss/variable.scss';
+@import "~common/scss/variable";
 
-.loading{
+.loading {
   width: 100%;
   height: 40px;
   text-align: center;
   img {
-    margin-top: 15px;
+    margin-top: 10px;
   }
 }
 </style>

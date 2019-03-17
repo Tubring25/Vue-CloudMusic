@@ -3,41 +3,41 @@
     <div class="search-suggest" v-show="!searchShow && query && songs.length > 0">
       <p class="title" v-show="showSinger && showList">最佳匹配</p>
       <div @click="selectItem(suggest.artists[0])" class="search-suggest-item" v-if="suggest.artists && showSinger">
-        <img :src="suggest.artists[0].img1V1Url" width="50" height="50">
+        <img :src="suggest.artists[0].img1v1Url" width="50" height="50">
         <span>歌手：{{suggest.artists[0].name}}</span>
       </div>
-      <div class="search-suggest-item" @click="selectList(suggest.playlists[0])" v-if="suggest.playlists && showList">
+      <div @click="selectList(suggest.playlists[0])" class="search-suggest-item" v-if="suggest.playlists && showList">
         <img :src="suggest.playlists[0].coverImgUrl" width="50" height="50">
         <div class="text">
           <p>歌单：{{suggest.playlists[0].name}}</p>
-          <p class="singer">{{suggest.albums[0].artists.name}}</p>
+          <p class="singer">{{suggest.albums[0].artist.name}}</p>
         </div>
+      </div>
     </div>
-  </div>
-  <ul class="suggest-list" ref="suggestList" v-show="!searchShow">
-    <li class="suggest-item" @click="selectSong(item)" v-for="(item, index) in songs" :key="index">
-      <div class="icon">
-        <i></i>
-      </div>
-      <div class="name">
-        <p class="song">{{item.name}}</p>
-        <p class="singer">{{item.singer}}</p>
-      </div>
-    </li>
-    <loading v-show="haveMore && query"></loading>
-  </ul>
-  <div class="no-result-wrapper" v-show="!haveMore && !songs.length && query">
-    抱歉，暂无搜索结果
+    <ul class="suggest-list" ref="suggestList" v-show="!searchShow">
+      <li @click="selectSong(item)" class="suggest-item" v-for="(item, index) in songs" :key="index">
+        <div class="icon">
+          <i></i>
+        </div>
+        <div class="name">
+          <p class="song">{{item.name}}</p>
+          <p class="singer">{{item.singer}}</p>
+        </div>
+      </li>
+      <loading v-show="haveMore && query"></loading>
+    </ul>
+    <div v-show="!haveMore && !songs.length && query" class="no-result-wrapper">
+      抱歉，暂无搜索结果
+    </div>
   </div>
 </template>
 
-
 <script>
-import Loading from '../../base/loading/loading'
-import Singer from '../../common/js/singer.js'
-import {getSearchSongs, getSearchSuggest, getSongDetail} from '../../api/search.js'
-import {createSearchSong} from '../../common/js/song.js'
-import {mapActions, mapMutations} from 'vuex'
+import Loading from 'base/loading/loading'
+import Singer from 'common/js/singer'
+import {getSearchSongs, getSearchSuggest, getSongDetail} from 'api/search'
+import {createSearchSong} from 'common/js/song'
+import {mapMutations, mapActions} from 'vuex'
 
 export default {
   props: {
@@ -47,7 +47,7 @@ export default {
     },
     showSinger: {
       type: Boolean,
-      deafult: true
+      default: true
     },
     showList: {
       type: Boolean,
@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     selectList (item) {
-    //   console.log('item', item)
+      console.log('item', item)
       const list = {}
       list.name = item.name
       list.id = item.id
@@ -85,7 +85,7 @@ export default {
       const singer = new Singer({
         id: item.id,
         name: item.name,
-        avatar: item.img1V1Url
+        avatar: item.img1v1Url
       })
       this.$router.push({
         path: `/search/singer/${singer.id}`
@@ -97,9 +97,15 @@ export default {
       getSongDetail(item.id).then((res) => {
         item.image = res.data.songs[0].al.picUrl
         this.insertSong(item)
+        // console.log(item.image)
       })
       this.$emit('select')
     },
+    // handlePlaylist (playlist) {
+    //   const bottom = playlist.length > 0 ? '90px' : ''
+    //   this.$refs.suggestList.style['margin-bottom'] = bottom
+    //   this.$emit('refresh')
+    // },
     search () {
       this.searchShow = false
       this.haveMore = true
@@ -122,13 +128,13 @@ export default {
       })
     },
     searchMore () {
-    //   console.log('searchMore')
-      if (!this.haveMore || !this.songs.length) {
+      console.log('searchMore')
+      if (!this.haveMore) {
         return
       }
-    //   if (!this.songs.length) {
-    //     return
-    //   }
+      if (!this.songs.length) {
+        return
+      }
       getSearchSongs(this.query, this.page).then((res) => {
         let list = res.data.result.songs
         if (!res.data.result.songs) {
@@ -176,9 +182,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-@import '../../common/scss/variable.scss';
-@import '../../common/scss/mixin.scss';
+<style scoped lang="scss" >
+@import "~common/scss/variable";
+@import "~common/scss/mixin";
 
 .suggest {
   height: 100%;
@@ -237,6 +243,7 @@ export default {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+      // padding-bottom: 20px
       }
       .singer {
         font-size: 12px;
@@ -247,6 +254,8 @@ export default {
       }
     }
     .icon {
+      // flex: 0 0 30px
+      // width: 30px
       [class^="icon-"] {
         font-size: 14px;
         color: $color-text;
@@ -258,7 +267,7 @@ export default {
       color: $color-text;
       overflow: hidden;
       .text {
-        @include no-wrap();
+       @include no-wrap();
       }
     }
   }
@@ -268,7 +277,7 @@ export default {
   overflow: hidden;
   left: 50%;
   top: 40vh;
-  transform: translateX(-50%);
+  transform: translatex(-50%);
   color: $color-text;
 }
 </style>

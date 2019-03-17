@@ -1,18 +1,18 @@
 <template>
   <div class="slider" ref="slider">
     <div class="slider-group" ref="sliderGroup">
-        <slot></slot>
+      <slot></slot>
     </div>
     <div class="dots">
-        <span class="dot" v-for="(item, index) in dots" :key="index" :class="{'active' : currentPageIndex === index}"></span>
+      <span class="dot" v-for="(item, index) in dots"
+      :key="index" :class="{'active' : currentPageIndex === index}"></span>
     </div>
   </div>
 </template>
 
 <script>
 import BScroll from 'better-scroll'
-import { addClass } from '../../common/js/dom.js'
-
+import {addClass} from 'common/js/dom'
 export default {
   data () {
     return {
@@ -21,7 +21,7 @@ export default {
     }
   },
   props: {
-    // 轮播
+    // 循环轮播
     loop: {
       type: Boolean,
       default: true
@@ -44,6 +44,7 @@ export default {
       this._initSlider()
       this._onScrollEnd()
     }, 20)
+
     window.addEventListener('resize', () => {
       if (!this.slider) {
         return
@@ -52,20 +53,17 @@ export default {
     })
   },
   methods: {
-    // 设置轮播宽度
     _setSliderWidth () {
-      // 外层div的子元素，即轮播img
-      this.children = this.$refs.sliderGroup.children
+      this.children = this.$refs.sliderGroup.children // 每个轮播图的集合
       let width = 0
-      // 总的slider宽度等于最外层的内部宽度
-      let sliderWidth = this.$refs.slider.clientWidth
-      // 循环子元素，添加class，并设置宽度为slider宽度
+      let sliderWidth = this.$refs.slider.clientWidth //单个slider的宽度为当前slider的宽度
       for (let i = 0; i < this.children.length; i++) {
         const child = this.children[i]
         addClass(child, 'slider-item')
         child.style.width = sliderWidth + 'px'
         width += sliderWidth
       }
+
       if (this.loop) {
         width += 2 * sliderWidth
       }
@@ -74,17 +72,17 @@ export default {
     _initSlider () {
       this.slider = new BScroll(this.$refs.slider, {
         scrollX: true,
-        // scrollY: false
-        mometun: false,
-        snap: {
+        // scrollY: false,
+        momentum: false, // 快读滑动时生成动画
+        snap: { 
           loop: this.loop,
-          threshold: 0.3,
+          threshold: 0.3, // 表示可滚动到下一个阈值
           speed: 400
         },
         snapSpeed: 400,
         bounce: false,
-        stopPropagation: true,
-        clcik: true
+        stopPropagation: true, // 阻止冒泡
+        click: true
       })
       this.slider.on('scrollEnd', this._onScrollEnd)
     },
@@ -95,14 +93,12 @@ export default {
         this._play()
       }
     },
-    // 执行一次完整轮播后清除setTimeout重新开始
     _play () {
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
         this.slider.next()
       }, this.interval)
     },
-    // dot数量与img匹配
     _initDots () {
       this.dots = new Array(this.children.length)
     }
@@ -112,9 +108,9 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-@import '../../common/scss/variable.scss';
 
+<style lang="scss" scoped>
+@import "~common/scss/variable";
 .slider {
   min-height: 1px;
   position: relative;
@@ -128,7 +124,7 @@ export default {
       overflow: hidden;
       text-align: center;
       img {
-        display: block;
+        display: block;;
         width: 100%
       }
     }

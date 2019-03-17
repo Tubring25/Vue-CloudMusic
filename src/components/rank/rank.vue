@@ -14,9 +14,6 @@
           </ul>
         </li>
       </ul>
-      <!-- <div class="loading-container" v-show="!yunTopList.length">
-        <loading></loading>
-      </div> -->
       <div v-show="showLoading" class="loading-content">
         <loading></loading>
       </div>
@@ -26,11 +23,10 @@
 </template>
 
 <script>
-import {getTop} from '../../api/rank'
-import Scroll from '../../base/scroll/scroll'
-import Loading from '../../base/loading/loading'
-// import Loading from 'base/loading/loading'
-import {playlistMixin} from '../../common/js/mixin'
+import {getTop} from 'api/rank'
+import Scroll from 'base/scroll/scroll'
+import Loading from 'base/loading/loading'
+import {playlistMixin} from 'common/js/mixin'
 import {mapMutations} from 'vuex'
 
 const YUNMUSIC_TOP = [0, 1, 2, 3, 4, 22, 23]
@@ -82,9 +78,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-@import "../../common/scss/variable";
-@import "../../common/scss/mixin";
+<style scoped lang="scss" >
+@import "~common/scss/variable";
+@import "~common/scss/mixin";
 
 .rank {
   position: fixed;

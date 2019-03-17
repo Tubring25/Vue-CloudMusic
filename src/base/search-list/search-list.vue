@@ -1,7 +1,7 @@
 <template>
   <div class="search-list" v-show="searches.length">
     <transition-group name="list" tag="ul">
-      <li class="search-item" v-for="item in searches" :key="item" @click="selectItem(item)">
+      <li :key="item" class="search-item" @click="selectItem(item)" v-for="item in searches">
         <span class="text">{{item}}</span>
         <span class="icon" @click.stop="deleteOne(item)">
           <i class="icon-delete"></i>
@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
 export default {
   props: {
     searches: {
@@ -28,23 +28,21 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-@import '../../common/scss/variable.scss';
-@import '../../common/scss/mixin.scss';
 
+<style scoped lang="scss">
+@import "~common/scss/variable";
+@import "~common/scss/mixin";
 .search-list {
   .search-item {
     display: flex;
-    height: 35px;
     align-items: center;
+    height: 35px;
     overflow: hidden;
     font-size: 14px;
-    &.list-enter-active,
-    &.list-leave-active {
+    &.list-enter-active, &.list-leave-active {
       transition: all 0.1s;
     }
-    &.list-enter,
-    &.list-leave {
+    &.list-enter, &.list-leave-to {
       height: 0;
     }
     .text {
@@ -52,7 +50,7 @@ export default {
       color: $color-text;
     }
     .icon {
-      @include entend-click();
+      @include extend-click();
       .icon-delete {
         font-size: $font-size-small;
         color: $color-text;

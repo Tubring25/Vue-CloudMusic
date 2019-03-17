@@ -3,31 +3,32 @@
     <slot></slot>
   </div>
 </template>
+
 <script>
 import BScroll from 'better-scroll'
 export default {
   props: {
-    probeType: { // 调节在scroll事件出发中探针的活跃度
+    probeType: {
       type: Number,
       default: 1
+    },
+    click: {
+      type: Boolean,
+      default: true
     },
     data: {
       type: Array,
       default: null
     },
-    click: { // 允许点击
-      type: Boolean,
-      default: true
-    },
-    listenScroll: { // 监听滚动
+    listenScroll: {
       type: Boolean,
       default: false
     },
-    pullup: { // 上拉
+    pullup: {
       type: Boolean,
       default: false
     },
-    refreshDelay: { // 刷新延迟
+    refreshDelay: {
       type: Number,
       default: 20
     }
@@ -39,7 +40,7 @@ export default {
   },
   methods: {
     _initScroll () {
-      if (!this.$refs.wrapper) { // 通过$refs访问ref的名称来访问DOM元素
+      if (!this.$refs.wrapper) {
         return
       }
       this.scroll = new BScroll(this.$refs.wrapper, {
@@ -64,8 +65,8 @@ export default {
     enable () {
       this.scroll && this.scroll.enable()
     },
-    disbale () {
-      this.scroll && this.scroll.disbale()
+    disable () {
+      this.scroll && this.scroll.disable()
     },
     refresh () {
       this.scroll && this.scroll.refresh()
@@ -73,8 +74,8 @@ export default {
     scrollTo () {
       this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
     },
-    scrollTOElement () {
-      this.scroll && this.scroll.scrollTOElement.apply(this.scroll, arguments)
+    scrollToElement () {
+      this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
     }
   },
   watch: {
@@ -86,3 +87,7 @@ export default {
   }
 }
 </script>
+
+<style>
+
+</style>
