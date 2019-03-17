@@ -3,6 +3,7 @@
 
 ## 预览
 *首页、排行榜、歌手列表、播放页面、歌词页面*
+<br>
 ![首页](/doc/img/1552639682(1).png)
 ![排行榜](/doc/img/1552639771(1).png)
 ![歌手列表](/doc/img/1552639796(1).png)
@@ -22,11 +23,13 @@
  - `SCSS`: CSS预编译处理
  - `ES6`: 目前主流语法
 <br>
+
 *后端*
  - `Node.js`: 利用Express搭建本地服务器
  - `axios`: 后端请求API数据
  - `NeteaseCloudMusicApi`: 网易云音乐Node.js 版API
 <br>
+
 *其他*
  - `vue-cli`: Vue脚手架工具
  - `iconfont`: 阿里图标库
@@ -36,6 +39,7 @@
 ## Build Setup
 代码克隆到本地，需要借助[NeteaseCloudMusicAp](https://binaryify.github.io/NeteaseCloudMusicApi/#/?id=neteasecloudmusicapi)
 <br>
+
     # install dependencies
     npm install
 
